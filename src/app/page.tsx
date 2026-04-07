@@ -41,7 +41,6 @@ import {
   Settings,
   Eye,
   EyeOff,
-  Github,
   Globe,
   Server,
   Package,
@@ -108,6 +107,8 @@ export default function Dashboard() {
     localStorage.setItem('r2_public_url', newConfig.publicUrl);
     setConfig(newConfig);
     setIsConfigured(!!(newConfig.endpoint && newConfig.accessKeyId && newConfig.secretAccessKey && newConfig.bucketName));
+    setIsUpdated(true);
+    setTimeout(() => setIsUpdated(false), 3000);
   };
 
   const toggleTheme = () => {
@@ -131,6 +132,7 @@ export default function Dashboard() {
   const [showFolderModal, setShowFolderModal] = useState(false);
   const [newFolderName, setNewFolderName] = useState('');
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
+  const [isUpdated, setIsUpdated] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -172,15 +174,15 @@ export default function Dashboard() {
   const stats = useMemo(() => {
     const totalFolders = items.folders.length;
     const totalFiles = items.files.length;
-    const imageFiles = items.files.filter(f => ['jpg', 'png', 'webp', 'jpeg', 'gif'].includes(f.type));
-    const videoFiles = items.files.filter(f => ['mp4', 'mov', 'webm'].includes(f.type));
-    const otherFiles = items.files.filter(f => !['jpg', 'png', 'webp', 'jpeg', 'gif', 'mp4', 'mov', 'webm'].includes(f.type));
+    const imageFiles = items.files.filter((f: any) => ['jpg', 'png', 'webp', 'jpeg', 'gif'].includes(f.type));
+    const videoFiles = items.files.filter((f: any) => ['mp4', 'mov', 'webm'].includes(f.type));
+    const otherFiles = items.files.filter((f: any) => !['jpg', 'png', 'webp', 'jpeg', 'gif', 'mp4', 'mov', 'webm'].includes(f.type));
     const imagesCount = imageFiles.length;
     const videosCount = videoFiles.length;
 
-    const imageBytes = imageFiles.reduce((acc, f) => acc + parseSize(f.size), 0);
-    const videoBytes = videoFiles.reduce((acc, f) => acc + parseSize(f.size), 0);
-    const otherBytes = otherFiles.reduce((acc, f) => acc + parseSize(f.size), 0);
+    const imageBytes = imageFiles.reduce((acc: number, f: any) => acc + parseSize(f.size), 0);
+    const videoBytes = videoFiles.reduce((acc: number, f: any) => acc + parseSize(f.size), 0);
+    const otherBytes = otherFiles.reduce((acc: number, f: any) => acc + parseSize(f.size), 0);
     const totalUsedBytes = imageBytes + videoBytes + otherBytes;
     const totalLimitBytes = 10 * 1024 ** 3; // 10 GB R2 Free Tier
 
@@ -375,8 +377,8 @@ export default function Dashboard() {
           <Database size={24} />
         </div>
         <div>
-          <h2 className="text-2xl font-black italic tracking-tighter uppercase">Initialize Node</h2>
-          <p className="text-[10px] font-black uppercase tracking-widest opacity-40">Connect your Cloudflare R2 Bucket</p>
+          <h2 className="text-2xl font-black italic tracking-tighter uppercase whitespace-nowrap">Connect Cloudflare R2</h2>
+          <p className="text-[10px] font-black uppercase tracking-widest opacity-40">Initialize Remote Storage Node</p>
         </div>
       </div>
 
@@ -586,6 +588,14 @@ export default function Dashboard() {
           <h2 className="text-2xl font-black italic tracking-tighter uppercase">Configuration</h2>
           <p className="text-[10px] font-black uppercase tracking-widest opacity-40">System Node Parameters</p>
         </div>
+        <AnimatePresence>
+          {isUpdated && (
+            <motion.div initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 10 }} className="ml-auto flex items-center gap-2 px-6 py-3 bg-green-500/10 border border-green-500/20 rounded-2xl text-green-500">
+               <CheckCircle2 size={16} />
+               <span className="text-[9px] font-black uppercase tracking-widest">Protocol Sync: Success</span>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
 
       <div className="glass rounded-[2.5rem] p-8 border-white/10 space-y-6">
@@ -624,15 +634,22 @@ export default function Dashboard() {
 
       <div className="p-8 bg-foreground/[0.02] rounded-[2.5rem] border border-foreground/[0.05] flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <div className="w-10 h-10 rounded-xl bg-foreground/[0.05] flex items-center justify-center">
-            <Github size={20} className="opacity-40" />
+          <div className="w-10 h-10 rounded-xl bg-cyan-600/10 flex items-center justify-center">
+            <Globe size={20} className="text-cyan-600" />
           </div>
           <div>
-            <p className="text-[10px] font-black uppercase tracking-widest">Open Source Core</p>
-            <p className="text-[9px] font-bold opacity-30">License: MIT</p>
+            <p className="text-[10px] font-black uppercase tracking-widest">Developed by Lakshan</p>
+            <p className="text-[9px] font-bold opacity-30">Open Source Protocol</p>
           </div>
         </div>
-        <button className="px-6 py-3 rounded-xl bg-foreground/[0.05] border border-foreground/[0.05] text-[9px] font-black uppercase tracking-widest hover:bg-foreground/[0.1] transition-all">View Repository</button>
+        <a 
+          href="https://wa.me/94768855659" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="px-6 py-3 rounded-xl bg-cyan-600 text-[9px] text-white font-black uppercase tracking-widest hover:bg-cyan-500 transition-all shadow-lg shadow-cyan-600/20"
+        >
+          Contact Developer
+        </a>
       </div>
     </div>
   );

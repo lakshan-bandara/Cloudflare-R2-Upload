@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+export const dynamic = "force-dynamic";
 import {
     ListObjectsV2Command,
     DeleteObjectCommand,
@@ -178,11 +179,11 @@ export async function POST(request: NextRequest) {
         }
 
         if (!file) return NextResponse.json({ error: "No file" }, { status: 400 });
-        const buffer = Buffer.from(await file.arrayBuffer());
+        const arrayBuffer = await file.arrayBuffer();
         const command = new PutObjectCommand({
             Bucket: bucketName,
             Key: `${prefix}${file.name}`,
-            Body: buffer,
+            Body: new Uint8Array(arrayBuffer),
             ContentType: file.type,
         });
 

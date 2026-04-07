@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+export const dynamic = "force-dynamic";
 import { Upload } from "@aws-sdk/lib-storage";
 import { createR2Client } from "@/lib/r2";
 
