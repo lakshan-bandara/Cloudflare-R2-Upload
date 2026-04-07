@@ -87,7 +87,7 @@ export default function Dashboard() {
       publicUrl: localStorage.getItem('r2_public_url') || ''
     };
     setConfig(savedConfig);
-    
+
     if (savedConfig.endpoint && savedConfig.accessKeyId && savedConfig.secretAccessKey && savedConfig.bucketName) {
       setIsConfigured(true);
     }
@@ -172,15 +172,15 @@ export default function Dashboard() {
   const stats = useMemo(() => {
     const totalFolders = items.folders.length;
     const totalFiles = items.files.length;
-    const imageFiles = items.files.filter((f: any) => ['jpg', 'png', 'webp', 'jpeg', 'gif'].includes(f.type));
-    const videoFiles = items.files.filter((f: any) => ['mp4', 'mov', 'webm'].includes(f.type));
-    const otherFiles = items.files.filter((f: any) => !['jpg', 'png', 'webp', 'jpeg', 'gif', 'mp4', 'mov', 'webm'].includes(f.type));
+    const imageFiles = items.files.filter(f => ['jpg', 'png', 'webp', 'jpeg', 'gif'].includes(f.type));
+    const videoFiles = items.files.filter(f => ['mp4', 'mov', 'webm'].includes(f.type));
+    const otherFiles = items.files.filter(f => !['jpg', 'png', 'webp', 'jpeg', 'gif', 'mp4', 'mov', 'webm'].includes(f.type));
     const imagesCount = imageFiles.length;
     const videosCount = videoFiles.length;
 
-    const imageBytes = imageFiles.reduce((acc: number, f: any) => acc + parseSize(f.size), 0);
-    const videoBytes = videoFiles.reduce((acc: number, f: any) => acc + parseSize(f.size), 0);
-    const otherBytes = otherFiles.reduce((acc: number, f: any) => acc + parseSize(f.size), 0);
+    const imageBytes = imageFiles.reduce((acc, f) => acc + parseSize(f.size), 0);
+    const videoBytes = videoFiles.reduce((acc, f) => acc + parseSize(f.size), 0);
+    const otherBytes = otherFiles.reduce((acc, f) => acc + parseSize(f.size), 0);
     const totalUsedBytes = imageBytes + videoBytes + otherBytes;
     const totalLimitBytes = 10 * 1024 ** 3; // 10 GB R2 Free Tier
 
@@ -269,7 +269,7 @@ export default function Dashboard() {
         const authRes = await r2Fetch(`/api/r2?action=get-upload-url&key=${encodeURIComponent(key)}&contentType=${encodeURIComponent(file.type)}`);
         const authData = await authRes.json();
         if (!authData.url) throw new Error(authData.error || "Failed to get upload URL");
-        
+
         await new Promise((resolve, reject) => {
           const xhr = new XMLHttpRequest();
           xhr.open('PUT', authData.url, true);
@@ -383,27 +383,27 @@ export default function Dashboard() {
       <div className="space-y-4">
         <div className="space-y-1.5">
           <label className="text-[9px] font-black uppercase tracking-widest opacity-30 ml-2">Endpoint URL</label>
-          <input 
-            type="text" placeholder="https://<account-id>.r2.cloudflarestorage.com" 
-            value={config.endpoint} onChange={(e) => setConfig({...config, endpoint: e.target.value})}
+          <input
+            type="text" placeholder="https://<account-id>.r2.cloudflarestorage.com"
+            value={config.endpoint} onChange={(e) => setConfig({ ...config, endpoint: e.target.value })}
             className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 px-6 outline-none focus:border-cyan-500/50 transition-all text-sm font-bold"
           />
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-1.5">
             <label className="text-[9px] font-black uppercase tracking-widest opacity-30 ml-2">Access Key ID</label>
-            <input 
-              type="text" placeholder="Access Key" 
-              value={config.accessKeyId} onChange={(e) => setConfig({...config, accessKeyId: e.target.value})}
+            <input
+              type="text" placeholder="Access Key"
+              value={config.accessKeyId} onChange={(e) => setConfig({ ...config, accessKeyId: e.target.value })}
               className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 px-6 outline-none focus:border-cyan-500/50 transition-all text-sm font-bold"
             />
           </div>
           <div className="space-y-1.5">
             <label className="text-[9px] font-black uppercase tracking-widest opacity-30 ml-2">Secret Access Key</label>
             <div className="relative">
-              <input 
-                type={showSecrets ? "text" : "password"} placeholder="Secret Key" 
-                value={config.secretAccessKey} onChange={(e) => setConfig({...config, secretAccessKey: e.target.value})}
+              <input
+                type={showSecrets ? "text" : "password"} placeholder="Secret Key"
+                value={config.secretAccessKey} onChange={(e) => setConfig({ ...config, secretAccessKey: e.target.value })}
                 className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 px-6 outline-none focus:border-cyan-500/50 transition-all text-sm font-bold"
               />
               <button onClick={() => setShowSecrets(!showSecrets)} className="absolute right-4 top-1/2 -translate-y-1/2 text-white/20 hover:text-white/40 transition-colors">
@@ -415,25 +415,25 @@ export default function Dashboard() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-1.5">
             <label className="text-[9px] font-black uppercase tracking-widest opacity-30 ml-2">Bucket Name</label>
-            <input 
-              type="text" placeholder="my-bucket" 
-              value={config.bucketName} onChange={(e) => setConfig({...config, bucketName: e.target.value})}
+            <input
+              type="text" placeholder="my-bucket"
+              value={config.bucketName} onChange={(e) => setConfig({ ...config, bucketName: e.target.value })}
               className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 px-6 outline-none focus:border-cyan-500/50 transition-all text-sm font-bold"
             />
           </div>
           <div className="space-y-1.5">
             <label className="text-[9px] font-black uppercase tracking-widest opacity-30 ml-2">Public URL (Optional)</label>
-            <input 
-              type="text" placeholder="https://pub-xxxx.r2.dev" 
-              value={config.publicUrl} onChange={(e) => setConfig({...config, publicUrl: e.target.value})}
+            <input
+              type="text" placeholder="https://pub-xxxx.r2.dev"
+              value={config.publicUrl} onChange={(e) => setConfig({ ...config, publicUrl: e.target.value })}
               className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 px-6 outline-none focus:border-cyan-500/50 transition-all text-sm font-bold"
             />
           </div>
         </div>
       </div>
 
-      <button 
-        onClick={() => saveConfig(config)} 
+      <button
+        onClick={() => saveConfig(config)}
         disabled={!config.endpoint || !config.accessKeyId || !config.secretAccessKey || !config.bucketName}
         className="w-full mt-8 py-5 bg-cyan-600 hover:bg-cyan-500 disabled:opacity-20 disabled:cursor-not-allowed text-white font-black rounded-2xl text-[10px] uppercase tracking-widest transition-all shadow-xl shadow-cyan-600/20 active:scale-95"
       >
@@ -498,9 +498,9 @@ export default function Dashboard() {
               <AnimatePresence mode="popLayout">
                 {paginatedItems.map((item) => (
                   <motion.div key={item.key} layout initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.9 }}>
-                    <FileItem 
-                      item={item} 
-                      isSelected={selectedKeys.has(item.key)} 
+                    <FileItem
+                      item={item}
+                      isSelected={selectedKeys.has(item.key)}
                       onSelect={() => toggleSelect(item.key)}
                       onFolderClick={() => setPrefix(item.key)}
                       onDelete={() => deleteItem(item.key)}
@@ -592,26 +592,26 @@ export default function Dashboard() {
         <div className="grid gap-6">
           <div className="space-y-2">
             <label className="text-[9px] font-black uppercase tracking-widest opacity-30 ml-2">Endpoint</label>
-            <input type="text" value={config.endpoint} onChange={e => setConfig({...config, endpoint: e.target.value})} className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 px-6 text-sm font-bold outline-none focus:border-cyan-500" />
+            <input type="text" value={config.endpoint} onChange={e => setConfig({ ...config, endpoint: e.target.value })} className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 px-6 text-sm font-bold outline-none focus:border-cyan-500" />
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
               <label className="text-[9px] font-black uppercase tracking-widest opacity-30 ml-2">Access Key</label>
-              <input type="text" value={config.accessKeyId} onChange={e => setConfig({...config, accessKeyId: e.target.value})} className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 px-6 text-sm font-bold outline-none focus:border-cyan-500" />
+              <input type="text" value={config.accessKeyId} onChange={e => setConfig({ ...config, accessKeyId: e.target.value })} className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 px-6 text-sm font-bold outline-none focus:border-cyan-500" />
             </div>
             <div className="space-y-2">
               <label className="text-[9px] font-black uppercase tracking-widest opacity-30 ml-2">Secret Key</label>
-              <input type="password" value={config.secretAccessKey} onChange={e => setConfig({...config, secretAccessKey: e.target.value})} className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 px-6 text-sm font-bold outline-none focus:border-cyan-500" />
+              <input type="password" value={config.secretAccessKey} onChange={e => setConfig({ ...config, secretAccessKey: e.target.value })} className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 px-6 text-sm font-bold outline-none focus:border-cyan-500" />
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
               <label className="text-[9px] font-black uppercase tracking-widest opacity-30 ml-2">Bucket Name</label>
-              <input type="text" value={config.bucketName} onChange={e => setConfig({...config, bucketName: e.target.value})} className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 px-6 text-sm font-bold outline-none focus:border-cyan-500" />
+              <input type="text" value={config.bucketName} onChange={e => setConfig({ ...config, bucketName: e.target.value })} className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 px-6 text-sm font-bold outline-none focus:border-cyan-500" />
             </div>
             <div className="space-y-2">
               <label className="text-[9px] font-black uppercase tracking-widest opacity-30 ml-2">Public URL</label>
-              <input type="text" value={config.publicUrl} onChange={e => setConfig({...config, publicUrl: e.target.value})} className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 px-6 text-sm font-bold outline-none focus:border-cyan-500" />
+              <input type="text" value={config.publicUrl} onChange={e => setConfig({ ...config, publicUrl: e.target.value })} className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 px-6 text-sm font-bold outline-none focus:border-cyan-500" />
             </div>
           </div>
         </div>
@@ -621,7 +621,7 @@ export default function Dashboard() {
           <button onClick={() => { localStorage.clear(); window.location.reload(); }} className="px-8 py-5 bg-red-500/10 hover:bg-red-500 hover:text-white text-red-500 font-black rounded-2xl text-[10px] uppercase tracking-widest transition-all border border-red-500/20">Wipe Data</button>
         </div>
       </div>
-      
+
       <div className="p-8 bg-foreground/[0.02] rounded-[2.5rem] border border-foreground/[0.05] flex items-center justify-between">
         <div className="flex items-center gap-4">
           <div className="w-10 h-10 rounded-xl bg-foreground/[0.05] flex items-center justify-center">
@@ -659,7 +659,7 @@ export default function Dashboard() {
                 <span className="text-[8px] font-black text-cyan-600 uppercase tracking-[0.2em]">Data Node</span>
               </div>
             </div>
-            
+
             <nav className="flex-1 space-y-4">
               <SidebarItem icon={<Package size={18} />} label="Files" active={activeView === 'overview'} onClick={() => setActiveView('overview')} />
               <SidebarItem icon={<LinkIcon size={18} />} label="Remote" active={false} onClick={() => router.push('/remote')} />
@@ -679,10 +679,10 @@ export default function Dashboard() {
               <div className="flex items-center gap-6 flex-1">
                 <div className="relative max-w-[280px] w-full group">
                   <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-foreground/10 group-focus-within:text-cyan-600 transition-colors" size={14} />
-                  <input 
-                    type="text" placeholder="FILTER ENTITIES..." 
-                    value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} 
-                    className="w-full bg-foreground/[0.03] border border-foreground/[0.05] rounded-2xl py-2.5 pl-12 pr-6 outline-none focus:bg-foreground/[0.06] focus:border-cyan-500/20 transition-all text-[11px] font-bold" 
+                  <input
+                    type="text" placeholder="FILTER ENTITIES..."
+                    value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-full bg-foreground/[0.03] border border-foreground/[0.05] rounded-2xl py-2.5 pl-12 pr-6 outline-none focus:bg-foreground/[0.06] focus:border-cyan-500/20 transition-all text-[11px] font-bold"
                   />
                 </div>
               </div>
@@ -691,8 +691,8 @@ export default function Dashboard() {
                   {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
                 </button>
                 <input type="file" multiple hidden ref={fileInputRef} onChange={(e) => handleFileUploads(e.target.files || [])} />
-                <button 
-                  onClick={() => fileInputRef.current?.click()} 
+                <button
+                  onClick={() => fileInputRef.current?.click()}
                   className="flex items-center justify-center px-8 h-12 bg-cyan-600 hover:bg-cyan-500 text-white font-black rounded-2xl text-[10px] uppercase tracking-widest transition-all active:scale-95 shadow-xl shadow-cyan-600/20"
                 >
                   <Upload size={16} className="mr-3" /> Upload
@@ -700,10 +700,10 @@ export default function Dashboard() {
               </div>
             </header>
 
-            <div 
+            <div
               className="flex-1 overflow-y-auto p-8 md:p-12 no-scrollbar"
               onDragOver={handleDragOver}
-            > 
+            >
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
                 {activeView === 'overview' ? renderOverview() : renderSettings()}
               </motion.div>
@@ -713,7 +713,7 @@ export default function Dashboard() {
           {/* Drag Overlay */}
           <AnimatePresence>
             {isDragging && (
-              <motion.div 
+              <motion.div
                 initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
                 className="fixed inset-0 z-[10000] bg-cyan-600/10 backdrop-blur-sm flex items-center justify-center p-12"
                 onDragOver={e => e.preventDefault()} onDragLeave={handleDragLeave} onDrop={handleDrop}
@@ -815,8 +815,8 @@ export default function Dashboard() {
                 <div className="w-12 h-12 rounded-2xl bg-cyan-600/10 flex items-center justify-center text-cyan-600"><Folder size={24} /></div>
                 <h3 className="text-xl font-black italic tracking-tighter uppercase">New Entity Dir</h3>
               </div>
-              <input 
-                autoFocus type="text" placeholder="DIRECTORY NAME..." 
+              <input
+                autoFocus type="text" placeholder="DIRECTORY NAME..."
                 value={newFolderName} onChange={e => setNewFolderName(e.target.value)}
                 onKeyDown={e => e.key === 'Enter' && createFolder()}
                 className="w-full bg-white/5 border border-white/10 rounded-2xl py-5 px-6 outline-none focus:border-cyan-500/50 transition-all text-sm font-bold mb-8"
@@ -835,7 +835,7 @@ export default function Dashboard() {
 
 function SidebarItem({ icon, label, active, onClick }: { icon: any, label: string, active: boolean, onClick: () => void }) {
   return (
-    <button 
+    <button
       onClick={onClick}
       className={`w-full flex items-center gap-4 px-6 py-4 rounded-2xl transition-all group ${active ? 'bg-cyan-600 text-white shadow-xl shadow-cyan-600/20' : 'text-foreground/30 hover:bg-foreground/[0.03] hover:text-foreground/70'}`}
     >
@@ -859,9 +859,9 @@ function StatItem({ label, value, color }: { label: string, value: string, color
 
 function FileItem({ item, isSelected, onSelect, onFolderClick, onDelete, onPreview, onCopy, isCopied }: any) {
   const isFolder = item.type === 'folder';
-  
+
   return (
-    <div 
+    <div
       className={`group relative aspect-square rounded-[2.5rem] border transition-all duration-500 cursor-pointer overflow-hidden ${isSelected ? 'bg-cyan-600/5 border-cyan-500/50 shadow-2xl shadow-cyan-500/10' : 'bg-foreground/[0.02] border-foreground/[0.05] hover:bg-foreground/[0.04] hover:border-foreground/[0.1] hover:scale-[1.02]'}`}
       onClick={() => isFolder ? onFolderClick() : onPreview()}
     >

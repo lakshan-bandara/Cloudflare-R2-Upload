@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import { 
-    ListObjectsV2Command, 
-    DeleteObjectCommand, 
-    PutObjectCommand, 
-    GetObjectCommand 
+import {
+    ListObjectsV2Command,
+    DeleteObjectCommand,
+    PutObjectCommand,
+    GetObjectCommand
 } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { createR2Client } from "@/lib/r2";
@@ -21,7 +21,7 @@ const getR2Config = (request: NextRequest) => {
 // Security Helper: Check if request is authorized
 const isAuthorized = (request: NextRequest) => {
     const { accessKeyId, secretAccessKey } = getR2Config(request);
-    
+
     // If user provides their own keys, they are implicitly authorized for those keys
     if (accessKeyId && secretAccessKey && request.headers.get("x-r2-access-key-id")) {
         return true;
@@ -68,8 +68,8 @@ export async function GET(request: NextRequest) {
 
         // Action: Get DIRECT UPLOAD URL for large files
         if (action === "get-upload-url" && key) {
-            const command = new PutObjectCommand({ 
-                Bucket: bucketName, 
+            const command = new PutObjectCommand({
+                Bucket: bucketName,
                 Key: key,
                 ContentType: contentType || "application/octet-stream"
             });
@@ -79,8 +79,8 @@ export async function GET(request: NextRequest) {
 
         // Action: True bucket-wide storage stats (no delimiter = flat list of ALL objects)
         if (action === "storage-stats") {
-            const IMAGE_EXTS = new Set(['jpg','jpeg','png','webp','gif','svg','bmp','ico']);
-            const VIDEO_EXTS = new Set(['mp4','mov','webm','avi','mkv','m4v']);
+            const IMAGE_EXTS = new Set(['jpg', 'jpeg', 'png', 'webp', 'gif', 'svg', 'bmp', 'ico']);
+            const VIDEO_EXTS = new Set(['mp4', 'mov', 'webm', 'avi', 'mkv', 'm4v']);
             let imageBytes = 0, videoBytes = 0, otherBytes = 0, totalFiles = 0;
             let token: string | undefined = undefined;
             do {
@@ -117,7 +117,7 @@ export async function GET(request: NextRequest) {
             });
 
             const response = await client.send(command) as any;
-            
+
             const fetchedFolders = (response.CommonPrefixes || []).map((cp: any) => ({
                 id: cp.Prefix,
                 name: cp.Prefix?.replace(prefix, "").replace("/", "") || "",
@@ -161,7 +161,7 @@ export async function POST(request: NextRequest) {
     try {
         const { endpoint, accessKeyId, secretAccessKey, bucketName } = getR2Config(request);
         const client = createR2Client(endpoint, accessKeyId, secretAccessKey);
-        
+
         const formData = await request.formData();
         const file = formData.get("file") as File;
         const prefix = formData.get("prefix") as string || "";
@@ -178,11 +178,11 @@ export async function POST(request: NextRequest) {
         }
 
         if (!file) return NextResponse.json({ error: "No file" }, { status: 400 });
-        const arrayBuffer = await file.arrayBuffer();
+        const buffer = Buffer.from(await file.arrayBuffer());
         const command = new PutObjectCommand({
             Bucket: bucketName,
             Key: `${prefix}${file.name}`,
-            Body: new Uint8Array(arrayBuffer),
+            Body: buffer,
             ContentType: file.type,
         });
 
@@ -202,7 +202,7 @@ export async function DELETE(request: NextRequest) {
     try {
         const { endpoint, accessKeyId, secretAccessKey, bucketName } = getR2Config(request);
         const client = createR2Client(endpoint, accessKeyId, secretAccessKey);
-        
+
         const { searchParams } = new URL(request.url);
         const key = searchParams.get("key");
         if (!key) return NextResponse.json({ error: "Key required" }, { status: 400 });
