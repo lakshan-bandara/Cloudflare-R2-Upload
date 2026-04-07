@@ -172,15 +172,15 @@ export default function Dashboard() {
   const stats = useMemo(() => {
     const totalFolders = items.folders.length;
     const totalFiles = items.files.length;
-    const imageFiles = items.files.filter(f => ['jpg', 'png', 'webp', 'jpeg', 'gif'].includes(f.type));
-    const videoFiles = items.files.filter(f => ['mp4', 'mov', 'webm'].includes(f.type));
-    const otherFiles = items.files.filter(f => !['jpg', 'png', 'webp', 'jpeg', 'gif', 'mp4', 'mov', 'webm'].includes(f.type));
+    const imageFiles = items.files.filter((f: any) => ['jpg', 'png', 'webp', 'jpeg', 'gif'].includes(f.type));
+    const videoFiles = items.files.filter((f: any) => ['mp4', 'mov', 'webm'].includes(f.type));
+    const otherFiles = items.files.filter((f: any) => !['jpg', 'png', 'webp', 'jpeg', 'gif', 'mp4', 'mov', 'webm'].includes(f.type));
     const imagesCount = imageFiles.length;
     const videosCount = videoFiles.length;
 
-    const imageBytes = imageFiles.reduce((acc, f) => acc + parseSize(f.size), 0);
-    const videoBytes = videoFiles.reduce((acc, f) => acc + parseSize(f.size), 0);
-    const otherBytes = otherFiles.reduce((acc, f) => acc + parseSize(f.size), 0);
+    const imageBytes = imageFiles.reduce((acc: number, f: any) => acc + parseSize(f.size), 0);
+    const videoBytes = videoFiles.reduce((acc: number, f: any) => acc + parseSize(f.size), 0);
+    const otherBytes = otherFiles.reduce((acc: number, f: any) => acc + parseSize(f.size), 0);
     const totalUsedBytes = imageBytes + videoBytes + otherBytes;
     const totalLimitBytes = 10 * 1024 ** 3; // 10 GB R2 Free Tier
 
