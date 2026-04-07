@@ -13,19 +13,19 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "DrapXi — Cloud R2 Storage Manager",
-  description: "A high-performance, secure Cloudflare R2 dashboard. Effortlessly manage, upload, and organize your cloud assets with a professional storage interface.",
+  title: "R2 Data Node — Cloudflare R2 Manager",
+  description: "Open-source, premium Cloudflare R2 management dashboard. Securely manage, upload, and synchronize your cloud storage with zero configuration.",
   openGraph: {
-    title: "DrapXi — Cloud R2 Storage Manager",
-    description: "Manage, upload, and organize your Cloudflare R2 assets with a professional, secure dashboard.",
-    url: "https://drapxi.site",
-    siteName: "DrapXi R2",
+    title: "R2 Data Node — Cloudflare R2 Manager",
+    description: "Securely manage, upload, and synchronize your Cloudflare R2 assets with a premium open-source dashboard.",
+    url: "https://github.com/lakshan-bandara/Cloudflare-R2-Upload",
+    siteName: "R2 Data Node",
     images: [
       {
         url: "/opengraph-image.png",
         width: 1200,
         height: 630,
-        alt: "DrapXi R2 Manager Preview",
+        alt: "R2 Data Node Preview",
       },
     ],
     locale: "en_US",
@@ -33,8 +33,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "DrapXi — Cloud R2 Storage Manager",
-    description: "Cloud storage reimagined with Cloudflare R2 and DrapXi.",
+    title: "R2 Data Node — Cloudflare R2 Manager",
+    description: "Cloud storage reimagined with Cloudflare R2 and R2 Data Node.",
     images: ["/opengraph-image.png"],
   },
 };
